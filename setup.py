@@ -11,8 +11,9 @@ setuptools.setup(
     description="Resolve schema and deploy to single schema",
     long_description="file: README.md",
     long_description_content_type="text/markdown",
-    url="https://github.com/elyashiv3839/compare_objects.git",
-    project_urls={"Bug Tracker": "https://github.com/elyashiv3839/compare_objects.git/issues"},
+    url="https://github.com/elyashiv3839/openapi-schema-generator.git",
+    download_url="https://github.com/elyashiv3839/openapi-schema-generator/archive/refs/tags/1.0.0.tar.gz",
+    project_urls={"Bug Tracker": "https://github.com/elyashiv3839/openapi-schema-generator.git/issues"},
     classifier=[
         "Programming Language :: Python :: 3",
         "Licence :: RAFAEL",
