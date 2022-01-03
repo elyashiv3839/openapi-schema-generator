@@ -21,14 +21,14 @@
 - Usage:
     - Testing tools:
         ```
-        python -m ccst_openapi_schema_generator --path=<openapi_root_path> --output=<(default)result.json>
+        python -m openapi_schema_generator --path=<openapi_root_path> --output=<(default)result.json>
         
         ```
     
     - Imports:
         ```
-        from ccst_openapi_schema_generator import OpenApiSchemaGenerator
-		from ccst_openapi_schema_generator import OpenApiSchemaValidator
+        from openapi_schema_generator import OpenApiSchemaGenerator
+		from openapi_schema_generator import OpenApiSchemaValidator
         ```
 		
     - Create a reference to your configuration:
