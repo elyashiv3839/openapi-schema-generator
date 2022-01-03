@@ -1,0 +1,11 @@
+.idea/*
+.pytest_cache/*
+venv/*
+
+__pycache__/*
+test/__pycache__/*
+openapi_schema_generator/__pycache__/*
+
+__pycache__
+test/__pycache__
+openapi_schema_generator/__pycache__

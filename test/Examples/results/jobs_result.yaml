@@ -1,0 +1,4923 @@
+components:
+  schemas:
+    algorithm:
+      properties:
+        algorithmEnv:
+          description: key value environment variables for algorithm
+          type: object
+        algorithmImage:
+          description: image name as in the docker registry
+          type: string
+        cpu:
+          description: algorithm cpu
+          minimum: 0
+          type: number
+        entryPoint:
+          type: string
+        env:
+          enum:
+          - nodejs
+          - python
+          - jvm
+          type: string
+        gpu:
+          description: algorithm gpu
+          minimum: 0
+          type: integer
+        mem:
+          description: algorithm memory
+          example: 512Mi
+          type: string
+        minHotWorkers:
+          default: 0
+          description: how many live algorithm instances will always run
+          minimum: 0
+          type: integer
+        name:
+          description: Unique identifier representing a specific algorithm
+          format: algorithm-name
+          minLength: 1
+          type: string
+        nodeSelector:
+          additionalProperties:
+            type: string
+          description: key value labels for nodes constraint
+          type: object
+        options:
+          default: {}
+          properties:
+            debug:
+              default: false
+              description: debug algorithm locally
+              type: boolean
+            pending:
+              default: false
+              description: pending algorithm
+              type: boolean
+          type: object
+        version:
+          type: string
+        workerEnv:
+          description: key value environment variables for worker
+          type: object
+      required:
+      - name
+      type: object
+    algorithmApplyResponse:
+      properties:
+        algorithm:
+          properties:
+            algorithmEnv:
+              description: key value environment variables for algorithm
+              type: object
+            algorithmImage:
+              description: image name as in the docker registry
+              type: string
+            cpu:
+              description: algorithm cpu
+              minimum: 0
+              type: number
+            entryPoint:
+              type: string
+            env:
+              enum:
+              - nodejs
+              - python
+              - jvm
+              type: string
+            gpu:
+              description: algorithm gpu
+              minimum: 0
+              type: integer
+            mem:
+              description: algorithm memory
+              example: 512Mi
+              type: string
+            minHotWorkers:
+              default: 0
+              description: how many live algorithm instances will always run
+              minimum: 0
+              type: integer
+            name:
+              description: Unique identifier representing a specific algorithm
+              format: algorithm-name
+              minLength: 1
+              type: string
+            nodeSelector:
+              additionalProperties:
+                type: string
+              description: key value labels for nodes constraint
+              type: object
+            options:
+              default: {}
+              properties:
+                debug:
+                  default: false
+                  description: debug algorithm locally
+                  type: boolean
+                pending:
+                  default: false
+                  description: pending algorithm
+                  type: boolean
+              type: object
+            version:
+              type: string
+            workerEnv:
+              description: key value environment variables for worker
+              type: object
+          required:
+          - name
+          type: object
+        buildId:
+          description: Pipeline name
+          type: string
+        status:
+          type: string
+        timestamp:
+          type: string
+      type: object
+    caching:
+      additionalProperties: false
+      properties:
+        jobId:
+          description: Unique job identifier
+          minLength: 1
+          type: string
+        nodeName:
+          description: Unique node identifier
+          minLength: 1
+          type: string
+      required:
+      - jobId
+      - nodeName
+      type: object
+    cronPattern:
+      description: cron job
+      format: cron
+      minLength: 1
+      type: string
+    cronRequest:
+      properties:
+        name:
+          description: Unique identifier representing a specific pipeline
+          format: pipeline-name
+          minLength: 1
+          type: string
+        pattern:
+          description: cron job
+          format: cron
+          minLength: 1
+          type: string
+      required:
+      - name
+      type: object
+    defaultResponse:
+      properties:
+        message:
+          type: string
+      type: object
+    error:
+      properties:
+        code:
+          format: int32
+          type: integer
+        message:
+          type: string
+      type: object
+    execTreeNode:
+      properties:
+        jobId:
+          description: Unique identifier representing a specific pipeline
+          type: string
+        name:
+          description: Pipeline name
+          type: string
+      type: object
+    execTreeResult:
+      items:
+        properties:
+          jobId:
+            description: Unique identifier representing a specific pipeline
+            type: string
+          name:
+            description: Pipeline name
+            type: string
+        type: object
+      type: array
+    jobId:
+      properties:
+        jobId:
+          description: Unique identifier representing pipeline execution
+          type: string
+      required:
+      - jobId
+      type: object
+    options:
+      description: optional properties
+      properties:
+        batchTolerance:
+          default: 80
+          example: 80
+          maximum: 100
+          minimum: 0
+          type: integer
+        concurrentPipelines:
+          example: 1
+          maximum: 10000
+          minimum: 1
+          type: integer
+        progressVerbosityLevel:
+          default: info
+          enum:
+          - trace
+          - debug
+          - info
+          - warn
+          - error
+          - critical
+          example: info
+          type: string
+        ttl:
+          default: 3600
+          description: pipeline time to live in seconds
+          example: 3600
+          minimum: 1
+          type: integer
+      type: object
+    pipeline:
+      additionalProperties: false
+      properties:
+        description:
+          description: pipeline description
+          type: string
+        flowInput:
+          description: input object
+          type: object
+        name:
+          description: Unique identifier representing a specific pipeline
+          format: pipeline-name
+          minLength: 1
+          type: string
+        nodes:
+          description: Array of nodes
+          items:
+            properties:
+              algorithmName:
+                description: The name of the algorithm
+                format: algorithm-name
+                minLength: 1
+                type: string
+              input:
+                default: []
+                description: The input for the algorithm
+                items: {}
+                type: array
+              nodeName:
+                description: Unique node identifier
+                minLength: 1
+                type: string
+            required:
+            - nodeName
+            - algorithmName
+            type: object
+          type: array
+        options:
+          default: {}
+          description: optional properties
+          properties:
+            batchTolerance:
+              default: 80
+              example: 80
+              maximum: 100
+              minimum: 0
+              type: integer
+            concurrentPipelines:
+              example: 1
+              maximum: 10000
+              minimum: 1
+              type: integer
+            progressVerbosityLevel:
+              default: info
+              enum:
+              - trace
+              - debug
+              - info
+              - warn
+              - error
+              - critical
+              example: info
+              type: string
+            ttl:
+              default: 3600
+              description: pipeline time to live in seconds
+              example: 3600
+              minimum: 1
+              type: integer
+          type: object
+        priority:
+          default: 3
+          example: 3
+          maximum: 5
+          minimum: 1
+          type: integer
+        triggers:
+          additionalProperties: false
+          properties:
+            cron:
+              properties:
+                enabled:
+                  default: false
+                  description: enable or disable cron job
+                  type: boolean
+                pattern:
+                  description: cron job
+                  format: cron
+                  minLength: 1
+                  type: string
+              type: object
+            pipelines:
+              description: pipelines to activate upon result
+              items:
+                minLength: 1
+                type: string
+              type: array
+          type: object
+        webhooks:
+          additionalProperties: false
+          properties:
+            progress:
+              description: url to activate upon progress
+              example: http://my-url-to-progress
+              format: url
+              minLength: 1
+              type: string
+            result:
+              description: url to activate upon result
+              example: http://my-url-to-result
+              format: url
+              minLength: 1
+              type: string
+          type: object
+      required:
+      - name
+      - nodes
+      type: object
+    pipelineName:
+      description: Unique identifier representing a specific pipeline
+      format: pipeline-name
+      minLength: 1
+      type: string
+    pipelineNode:
+      properties:
+        algorithmName:
+          description: The name of the algorithm
+          format: algorithm-name
+          minLength: 1
+          type: string
+        input:
+          default: []
+          description: The input for the algorithm
+          items: {}
+          type: array
+        nodeName:
+          description: Unique node identifier
+          minLength: 1
+          type: string
+      required:
+      - nodeName
+      - algorithmName
+      type: object
+    pipelineResult:
+      properties:
+        data:
+          items: {}
+          type: array
+        jobId:
+          type: string
+        pipeline:
+          type: string
+        status:
+          type: string
+        storageModule:
+          type: string
+        timeTook:
+          type: number
+        timestamp:
+          type: string
+      type: object
+    priority:
+      default: 3
+      example: 3
+      maximum: 5
+      minimum: 1
+      type: integer
+    stopRequest:
+      properties:
+        jobId:
+          description: Unique identifier representing pipeline execution
+          type: string
+        reason:
+          default: requested by user
+          description: reason for stop pipeline
+          type: string
+      required:
+      - jobId
+      type: object
+    storedPipeline:
+      additionalProperties: false
+      properties:
+        flowInput:
+          description: input object
+          type: object
+        name:
+          description: Unique identifier representing a specific pipeline
+          format: pipeline-name
+          minLength: 1
+          type: string
+        options:
+          default: {}
+          description: optional properties
+          properties:
+            batchTolerance:
+              default: 80
+              example: 80
+              maximum: 100
+              minimum: 0
+              type: integer
+            concurrentPipelines:
+              example: 1
+              maximum: 10000
+              minimum: 1
+              type: integer
+            progressVerbosityLevel:
+              default: info
+              enum:
+              - trace
+              - debug
+              - info
+              - warn
+              - error
+              - critical
+              example: info
+              type: string
+            ttl:
+              default: 3600
+              description: pipeline time to live in seconds
+              example: 3600
+              minimum: 1
+              type: integer
+          type: object
+        priority:
+          default: 3
+          example: 3
+          maximum: 5
+          minimum: 1
+          type: integer
+        triggers:
+          additionalProperties: false
+          properties:
+            cron:
+              properties:
+                enabled:
+                  default: false
+                  description: enable or disable cron job
+                  type: boolean
+                pattern:
+                  description: cron job
+                  format: cron
+                  minLength: 1
+                  type: string
+              type: object
+            pipelines:
+              description: pipelines to activate upon result
+              items:
+                minLength: 1
+                type: string
+              type: array
+          type: object
+        webhooks:
+          additionalProperties: false
+          properties:
+            progress:
+              description: url to activate upon progress
+              example: http://my-url-to-progress
+              format: url
+              minLength: 1
+              type: string
+            result:
+              description: url to activate upon result
+              example: http://my-url-to-result
+              format: url
+              minLength: 1
+              type: string
+          type: object
+      required:
+      - name
+      type: object
+    triggers:
+      additionalProperties: false
+      properties:
+        cron:
+          properties:
+            enabled:
+              default: false
+              description: enable or disable cron job
+              type: boolean
+            pattern:
+              description: cron job
+              format: cron
+              minLength: 1
+              type: string
+          type: object
+        pipelines:
+          description: pipelines to activate upon result
+          items:
+            minLength: 1
+            type: string
+          type: array
+      type: object
+    webhookResult:
+      properties:
+        httpResponse:
+          properties:
+            statusCode:
+              type: string
+            statusMessage:
+              type: string
+          type: object
+        pipelineStatus:
+          type: string
+        responseStatus:
+          type: string
+        status:
+          type: string
+        timestamp:
+          type: string
+        url:
+          type: string
+      type: object
+    webhooks:
+      additionalProperties: false
+      properties:
+        progress:
+          description: url to activate upon progress
+          example: http://my-url-to-progress
+          format: url
+          minLength: 1
+          type: string
+        result:
+          description: url to activate upon result
+          example: http://my-url-to-result
+          format: url
+          minLength: 1
+          type: string
+      type: object
+externalDocs:
+  description: Find out more about Hkube
+  url: http://hkube.io
+info:
+  contact:
+    email: hkube.dev@gmail.com
+  description: HKube RESTful API
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: HKube API
+  version: 1.1.147
+openapi: 3.0.0
+paths:
+  /builds/list/{name}:
+    get:
+      description: returns all builds that related to algorithm
+      parameters:
+      - description: algorithm name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    algorithm:
+                      properties:
+                        algorithmEnv:
+                          description: key value environment variables for algorithm
+                          type: object
+                        algorithmImage:
+                          description: image name as in the docker registry
+                          type: string
+                        cpu:
+                          description: algorithm cpu
+                          minimum: 0
+                          type: number
+                        entryPoint:
+                          type: string
+                        env:
+                          enum:
+                          - nodejs
+                          - python
+                          - jvm
+                          type: string
+                        gpu:
+                          description: algorithm gpu
+                          minimum: 0
+                          type: integer
+                        mem:
+                          description: algorithm memory
+                          example: 512Mi
+                          type: string
+                        minHotWorkers:
+                          default: 0
+                          description: how many live algorithm instances will always
+                            run
+                          minimum: 0
+                          type: integer
+                        name:
+                          description: Unique identifier representing a specific algorithm
+                          format: algorithm-name
+                          minLength: 1
+                          type: string
+                        nodeSelector:
+                          additionalProperties:
+                            type: string
+                          description: key value labels for nodes constraint
+                          type: object
+                        options:
+                          default: {}
+                          properties:
+                            debug:
+                              default: false
+                              description: debug algorithm locally
+                              type: boolean
+                            pending:
+                              default: false
+                              description: pending algorithm
+                              type: boolean
+                          type: object
+                        version:
+                          type: string
+                        workerEnv:
+                          description: key value environment variables for worker
+                          type: object
+                      required:
+                      - name
+                      type: object
+                    buildId:
+                      description: Pipeline name
+                      type: string
+                    status:
+                      type: string
+                    timestamp:
+                      type: string
+                  type: object
+          description: algorithm apply list response
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: build Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get build
+      tags:
+      - Builds
+  /builds/status/{buildId}:
+    get:
+      description: returns the build status by specific build id
+      parameters:
+      - description: Unique identifier representing build for algorithm
+        in: path
+        name: buildId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  algorithm:
+                    properties:
+                      algorithmEnv:
+                        description: key value environment variables for algorithm
+                        type: object
+                      algorithmImage:
+                        description: image name as in the docker registry
+                        type: string
+                      cpu:
+                        description: algorithm cpu
+                        minimum: 0
+                        type: number
+                      entryPoint:
+                        type: string
+                      env:
+                        enum:
+                        - nodejs
+                        - python
+                        - jvm
+                        type: string
+                      gpu:
+                        description: algorithm gpu
+                        minimum: 0
+                        type: integer
+                      mem:
+                        description: algorithm memory
+                        example: 512Mi
+                        type: string
+                      minHotWorkers:
+                        default: 0
+                        description: how many live algorithm instances will always
+                          run
+                        minimum: 0
+                        type: integer
+                      name:
+                        description: Unique identifier representing a specific algorithm
+                        format: algorithm-name
+                        minLength: 1
+                        type: string
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        description: key value labels for nodes constraint
+                        type: object
+                      options:
+                        default: {}
+                        properties:
+                          debug:
+                            default: false
+                            description: debug algorithm locally
+                            type: boolean
+                          pending:
+                            default: false
+                            description: pending algorithm
+                            type: boolean
+                        type: object
+                      version:
+                        type: string
+                      workerEnv:
+                        description: key value environment variables for worker
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  buildId:
+                    description: Pipeline name
+                    type: string
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+                type: object
+          description: algorithm apply response
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: build Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get build status
+      tags:
+      - Builds
+  /cron/list:
+    get:
+      description: return cron list of all stored pipeline
+      parameters:
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: cron Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get cron list
+      tags:
+      - Cron
+  /cron/results/{name}:
+    get:
+      description: return cron results by given pipeline name
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: results Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get pipeline cron result
+      tags:
+      - Cron
+  /cron/start:
+    post:
+      description: Start cron by given pipeline name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Unique identifier representing a specific pipeline
+                  format: pipeline-name
+                  minLength: 1
+                  type: string
+                pattern:
+                  description: cron job
+                  format: cron
+                  minLength: 1
+                  type: string
+              required:
+              - name
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Start cron
+      tags:
+      - Cron
+  /cron/status/{name}:
+    get:
+      description: return cron status by given pipeline name
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: status Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get pipeline cron status
+      tags:
+      - Cron
+  /cron/stop:
+    post:
+      description: Stop cron by given pipeline name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: Unique identifier representing a specific pipeline
+                  format: pipeline-name
+                  minLength: 1
+                  type: string
+                pattern:
+                  description: cron job
+                  format: cron
+                  minLength: 1
+                  type: string
+              required:
+              - name
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Stop cron
+      tags:
+      - Cron
+  /exec/caching:
+    post:
+      description: the api allows you to run job from current node and getting the
+        data of the predecessors from caching of the previous run
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                jobId:
+                  description: Unique job identifier
+                  minLength: 1
+                  type: string
+                nodeName:
+                  description: Unique node identifier
+                  minLength: 1
+                  type: string
+              required:
+              - jobId
+              - nodeName
+              type: object
+        description: an object representing all information needed for stored pipeline
+          execution
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  jobId:
+                    description: Unique identifier representing pipeline execution
+                    type: string
+                required:
+                - jobId
+                type: object
+          description: pipeline execution data
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Run job from a specific node
+      tags:
+      - Execution
+  /exec/pipeline/list:
+    get:
+      description: Returns the current running pipelines data
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  description:
+                    description: pipeline description
+                    type: string
+                  flowInput:
+                    description: input object
+                    type: object
+                  name:
+                    description: Unique identifier representing a specific pipeline
+                    format: pipeline-name
+                    minLength: 1
+                    type: string
+                  nodes:
+                    description: Array of nodes
+                    items:
+                      properties:
+                        algorithmName:
+                          description: The name of the algorithm
+                          format: algorithm-name
+                          minLength: 1
+                          type: string
+                        input:
+                          default: []
+                          description: The input for the algorithm
+                          items: {}
+                          type: array
+                        nodeName:
+                          description: Unique node identifier
+                          minLength: 1
+                          type: string
+                      required:
+                      - nodeName
+                      - algorithmName
+                      type: object
+                    type: array
+                  options:
+                    default: {}
+                    description: optional properties
+                    properties:
+                      batchTolerance:
+                        default: 80
+                        example: 80
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      concurrentPipelines:
+                        example: 1
+                        maximum: 10000
+                        minimum: 1
+                        type: integer
+                      progressVerbosityLevel:
+                        default: info
+                        enum:
+                        - trace
+                        - debug
+                        - info
+                        - warn
+                        - error
+                        - critical
+                        example: info
+                        type: string
+                      ttl:
+                        default: 3600
+                        description: pipeline time to live in seconds
+                        example: 3600
+                        minimum: 1
+                        type: integer
+                    type: object
+                  priority:
+                    default: 3
+                    example: 3
+                    maximum: 5
+                    minimum: 1
+                    type: integer
+                  triggers:
+                    additionalProperties: false
+                    properties:
+                      cron:
+                        properties:
+                          enabled:
+                            default: false
+                            description: enable or disable cron job
+                            type: boolean
+                          pattern:
+                            description: cron job
+                            format: cron
+                            minLength: 1
+                            type: string
+                        type: object
+                      pipelines:
+                        description: pipelines to activate upon result
+                        items:
+                          minLength: 1
+                          type: string
+                        type: array
+                    type: object
+                  webhooks:
+                    additionalProperties: false
+                    properties:
+                      progress:
+                        description: url to activate upon progress
+                        example: http://my-url-to-progress
+                        format: url
+                        minLength: 1
+                        type: string
+                      result:
+                        description: url to activate upon result
+                        example: http://my-url-to-result
+                        format: url
+                        minLength: 1
+                        type: string
+                    type: object
+                required:
+                - name
+                - nodes
+                type: object
+          description: pipeline data
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get current running pipelines
+      tags:
+      - Execution
+  /exec/pipelines/{jobId}:
+    get:
+      description: Returns the executed pipeline data
+      parameters:
+      - description: Unique identifier representing pipeline execution
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  description:
+                    description: pipeline description
+                    type: string
+                  flowInput:
+                    description: input object
+                    type: object
+                  name:
+                    description: Unique identifier representing a specific pipeline
+                    format: pipeline-name
+                    minLength: 1
+                    type: string
+                  nodes:
+                    description: Array of nodes
+                    items:
+                      properties:
+                        algorithmName:
+                          description: The name of the algorithm
+                          format: algorithm-name
+                          minLength: 1
+                          type: string
+                        input:
+                          default: []
+                          description: The input for the algorithm
+                          items: {}
+                          type: array
+                        nodeName:
+                          description: Unique node identifier
+                          minLength: 1
+                          type: string
+                      required:
+                      - nodeName
+                      - algorithmName
+                      type: object
+                    type: array
+                  options:
+                    default: {}
+                    description: optional properties
+                    properties:
+                      batchTolerance:
+                        default: 80
+                        example: 80
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      concurrentPipelines:
+                        example: 1
+                        maximum: 10000
+                        minimum: 1
+                        type: integer
+                      progressVerbosityLevel:
+                        default: info
+                        enum:
+                        - trace
+                        - debug
+                        - info
+                        - warn
+                        - error
+                        - critical
+                        example: info
+                        type: string
+                      ttl:
+                        default: 3600
+                        description: pipeline time to live in seconds
+                        example: 3600
+                        minimum: 1
+                        type: integer
+                    type: object
+                  priority:
+                    default: 3
+                    example: 3
+                    maximum: 5
+                    minimum: 1
+                    type: integer
+                  triggers:
+                    additionalProperties: false
+                    properties:
+                      cron:
+                        properties:
+                          enabled:
+                            default: false
+                            description: enable or disable cron job
+                            type: boolean
+                          pattern:
+                            description: cron job
+                            format: cron
+                            minLength: 1
+                            type: string
+                        type: object
+                      pipelines:
+                        description: pipelines to activate upon result
+                        items:
+                          minLength: 1
+                          type: string
+                        type: array
+                    type: object
+                  webhooks:
+                    additionalProperties: false
+                    properties:
+                      progress:
+                        description: url to activate upon progress
+                        example: http://my-url-to-progress
+                        format: url
+                        minLength: 1
+                        type: string
+                      result:
+                        description: url to activate upon result
+                        example: http://my-url-to-result
+                        format: url
+                        minLength: 1
+                        type: string
+                    type: object
+                required:
+                - name
+                - nodes
+                type: object
+          description: pipeline data
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: jobId Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get pipeline data
+      tags:
+      - Execution
+  /exec/raw:
+    post:
+      description: Start pipeline execution with raw input, returns jobId that can
+        be used as a reference for the pipeline to do actions such as results/status/stop,
+        etc.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                description:
+                  description: pipeline description
+                  type: string
+                flowInput:
+                  description: input object
+                  type: object
+                name:
+                  description: Unique identifier representing a specific pipeline
+                  format: pipeline-name
+                  minLength: 1
+                  type: string
+                nodes:
+                  description: Array of nodes
+                  items:
+                    properties:
+                      algorithmName:
+                        description: The name of the algorithm
+                        format: algorithm-name
+                        minLength: 1
+                        type: string
+                      input:
+                        default: []
+                        description: The input for the algorithm
+                        items: {}
+                        type: array
+                      nodeName:
+                        description: Unique node identifier
+                        minLength: 1
+                        type: string
+                    required:
+                    - nodeName
+                    - algorithmName
+                    type: object
+                  type: array
+                options:
+                  default: {}
+                  description: optional properties
+                  properties:
+                    batchTolerance:
+                      default: 80
+                      example: 80
+                      maximum: 100
+                      minimum: 0
+                      type: integer
+                    concurrentPipelines:
+                      example: 1
+                      maximum: 10000
+                      minimum: 1
+                      type: integer
+                    progressVerbosityLevel:
+                      default: info
+                      enum:
+                      - trace
+                      - debug
+                      - info
+                      - warn
+                      - error
+                      - critical
+                      example: info
+                      type: string
+                    ttl:
+                      default: 3600
+                      description: pipeline time to live in seconds
+                      example: 3600
+                      minimum: 1
+                      type: integer
+                  type: object
+                priority:
+                  default: 3
+                  example: 3
+                  maximum: 5
+                  minimum: 1
+                  type: integer
+                triggers:
+                  additionalProperties: false
+                  properties:
+                    cron:
+                      properties:
+                        enabled:
+                          default: false
+                          description: enable or disable cron job
+                          type: boolean
+                        pattern:
+                          description: cron job
+                          format: cron
+                          minLength: 1
+                          type: string
+                      type: object
+                    pipelines:
+                      description: pipelines to activate upon result
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                  type: object
+                webhooks:
+                  additionalProperties: false
+                  properties:
+                    progress:
+                      description: url to activate upon progress
+                      example: http://my-url-to-progress
+                      format: url
+                      minLength: 1
+                      type: string
+                    result:
+                      description: url to activate upon result
+                      example: http://my-url-to-result
+                      format: url
+                      minLength: 1
+                      type: string
+                  type: object
+              required:
+              - name
+              - nodes
+              type: object
+        description: an object representing all information needed for pipeline execution
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  jobId:
+                    description: Unique identifier representing pipeline execution
+                    type: string
+                required:
+                - jobId
+                type: object
+          description: pipeline execution data
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Run raw pipeline
+      tags:
+      - Execution
+  /exec/results/{jobId}:
+    get:
+      description: returns result for the execution of a specific pipeline run. if
+        called before result is determined - returns error.
+      parameters:
+      - description: Unique identifier representing workflow execution - is given
+          in response to calling pipeline run method .
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items: {}
+                    type: array
+                  jobId:
+                    type: string
+                  pipeline:
+                    type: string
+                  status:
+                    type: string
+                  storageModule:
+                    type: string
+                  timeTook:
+                    type: number
+                  timestamp:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: jobId Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get pipeline result
+      tags:
+      - Execution
+  /exec/status/{jobId}:
+    get:
+      description: Returns a status for the current pipeline.
+      parameters:
+      - description: Unique identifier representing pipeline execution
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items: {}
+                    type: array
+                  jobId:
+                    type: string
+                  pipeline:
+                    type: string
+                  status:
+                    type: string
+                  storageModule:
+                    type: string
+                  timeTook:
+                    type: number
+                  timestamp:
+                    type: string
+                type: object
+          description: pipeline result
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: jobId Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get pipeline status
+      tags:
+      - Execution
+  /exec/stop:
+    post:
+      description: Call to stop pipeline execution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                jobId:
+                  description: Unique identifier representing pipeline execution
+                  type: string
+                reason:
+                  default: requested by user
+                  description: reason for stop pipeline
+                  type: string
+              required:
+              - jobId
+              type: object
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: the OK string
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: jobId Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Stop pipeline
+      tags:
+      - Execution
+  /exec/stored:
+    post:
+      description: Start pipeline execution when the name of the pipeline is known,
+        all parameters in this action will be merged with the stored pipeline and
+        then returns jobId that can be used as a reference for the pipeline to do
+        actions such as results/status/stop, etc.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                flowInput:
+                  description: input object
+                  type: object
+                name:
+                  description: Unique identifier representing a specific pipeline
+                  format: pipeline-name
+                  minLength: 1
+                  type: string
+                options:
+                  default: {}
+                  description: optional properties
+                  properties:
+                    batchTolerance:
+                      default: 80
+                      example: 80
+                      maximum: 100
+                      minimum: 0
+                      type: integer
+                    concurrentPipelines:
+                      example: 1
+                      maximum: 10000
+                      minimum: 1
+                      type: integer
+                    progressVerbosityLevel:
+                      default: info
+                      enum:
+                      - trace
+                      - debug
+                      - info
+                      - warn
+                      - error
+                      - critical
+                      example: info
+                      type: string
+                    ttl:
+                      default: 3600
+                      description: pipeline time to live in seconds
+                      example: 3600
+                      minimum: 1
+                      type: integer
+                  type: object
+                priority:
+                  default: 3
+                  example: 3
+                  maximum: 5
+                  minimum: 1
+                  type: integer
+                triggers:
+                  additionalProperties: false
+                  properties:
+                    cron:
+                      properties:
+                        enabled:
+                          default: false
+                          description: enable or disable cron job
+                          type: boolean
+                        pattern:
+                          description: cron job
+                          format: cron
+                          minLength: 1
+                          type: string
+                      type: object
+                    pipelines:
+                      description: pipelines to activate upon result
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                  type: object
+                webhooks:
+                  additionalProperties: false
+                  properties:
+                    progress:
+                      description: url to activate upon progress
+                      example: http://my-url-to-progress
+                      format: url
+                      minLength: 1
+                      type: string
+                    result:
+                      description: url to activate upon result
+                      example: http://my-url-to-result
+                      format: url
+                      minLength: 1
+                      type: string
+                  type: object
+              required:
+              - name
+              type: object
+        description: an object representing all information needed for stored pipeline
+          execution
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  jobId:
+                    description: Unique identifier representing pipeline execution
+                    type: string
+                required:
+                - jobId
+                type: object
+          description: pipeline execution data
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Run stored pipeline
+      tags:
+      - Execution
+  /exec/tree/{jobId}:
+    get:
+      description: Returns a tree of pipelines, usually a triggered pipelines
+      parameters:
+      - description: Unique identifier representing pipeline execution
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    jobId:
+                      description: Unique identifier representing a specific pipeline
+                      type: string
+                    name:
+                      description: Pipeline name
+                      type: string
+                  type: object
+                type: array
+          description: pipeline tree
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: jobId Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Pipeline execution tree
+      tags:
+      - Execution
+  /pipelines/results/raw/{name}:
+    get:
+      description: return results of raw pipelines by given pipeline name
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipelines Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get raw pipeline results
+      tags:
+      - Pipelines
+  /pipelines/results/stored/{name}:
+    get:
+      description: return results of stored pipelines by given pipeline name
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipelines Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get stored pipeline results
+      tags:
+      - Pipelines
+  /pipelines/status/raw/{name}:
+    get:
+      description: return status of raw pipelines by given pipeline name
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipelines Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get raw pipeline status
+      tags:
+      - Pipelines
+  /pipelines/status/stored/{name}:
+    get:
+      description: return status of stored pipelines by given pipeline name
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: sort by asc or desc
+        in: query
+        name: sort
+        schema:
+          type: string
+      - description: order by
+        in: query
+        name: order
+        schema:
+          type: string
+      - description: limit
+        in: query
+        name: limit
+        schema:
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    data:
+                      items: {}
+                      type: array
+                    jobId:
+                      type: string
+                    pipeline:
+                      type: string
+                    status:
+                      type: string
+                    storageModule:
+                      type: string
+                    timeTook:
+                      type: number
+                    timestamp:
+                      type: string
+                  type: object
+                type: array
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipelines Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get stored pipeline status
+      tags:
+      - Pipelines
+  /readme/algorithms/{name}:
+    delete:
+      description: Delete existing algorithm from store
+      parameters:
+      - description: algorithm name to get from the store
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Delete algorithm
+      tags:
+      - Algorithm Readme
+    get:
+      description: Get stored readme by name
+      parameters:
+      - description: algorithm name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get stored readme by name
+      tags:
+      - Algorithm Readme
+    post:
+      description: Insert new algorithm to store if not exists
+      parameters:
+      - description: algorithm name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                README.md:
+                  description: the readme.md file name of the file must be README.md
+                  format: binary
+                  type: string
+              type: object
+        description: algorithm readme to be added to the store
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: algorithm created
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: algorithm conflict
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Insert new readme to algorithm
+      tags:
+      - Algorithm Readme
+    put:
+      description: Update algorithm's store if not exists
+      parameters:
+      - description: algorithm name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                README.md:
+                  description: the readme.md file name of the file must be README.md
+                  format: binary
+                  type: string
+              type: object
+        description: algorithm readme to be added to the store
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: algorithm readme updated
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: algorithm conflict
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Update readme to algorithm
+      tags:
+      - Algorithm Readme
+  /readme/pipelines/{name}:
+    delete:
+      description: Delete existing pipeline from store
+      parameters:
+      - description: pipeline name to get from the store
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Delete pipeline
+      tags:
+      - Pipeline Readme
+    get:
+      description: Get stored readme by name
+      parameters:
+      - description: pipelines name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get stored readme by name
+      tags:
+      - Pipeline Readme
+    post:
+      description: Insert new pipeline to store if not exists
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                README.md:
+                  description: the readme.md file name of the file must be README.md
+                  format: binary
+                  type: string
+              type: object
+        description: pipeline readme to be added to the store
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: pipeline created
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: pipeline conflict
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Insert new readme to pipelines
+      tags:
+      - Pipeline Readme
+    put:
+      description: Update pipeline's store if not exists
+      parameters:
+      - description: pipeline name
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                README.md:
+                  description: the readme.md file name of the file must be README.md
+                  format: binary
+                  type: string
+              type: object
+        description: pipeline readme to be added to the store
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: pipeline readme updated
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: pipeline conflict
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Update readme to pipeline
+      tags:
+      - Pipeline Readme
+  /store/algorithms:
+    get:
+      description: Get all available algorithms from store
+      parameters:
+      - description: sort by
+        in: query
+        name: sort
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    algorithmEnv:
+                      description: key value environment variables for algorithm
+                      type: object
+                    algorithmImage:
+                      description: image name as in the docker registry
+                      type: string
+                    cpu:
+                      description: algorithm cpu
+                      minimum: 0
+                      type: number
+                    entryPoint:
+                      type: string
+                    env:
+                      enum:
+                      - nodejs
+                      - python
+                      - jvm
+                      type: string
+                    gpu:
+                      description: algorithm gpu
+                      minimum: 0
+                      type: integer
+                    mem:
+                      description: algorithm memory
+                      example: 512Mi
+                      type: string
+                    minHotWorkers:
+                      default: 0
+                      description: how many live algorithm instances will always run
+                      minimum: 0
+                      type: integer
+                    name:
+                      description: Unique identifier representing a specific algorithm
+                      format: algorithm-name
+                      minLength: 1
+                      type: string
+                    nodeSelector:
+                      additionalProperties:
+                        type: string
+                      description: key value labels for nodes constraint
+                      type: object
+                    options:
+                      default: {}
+                      properties:
+                        debug:
+                          default: false
+                          description: debug algorithm locally
+                          type: boolean
+                        pending:
+                          default: false
+                          description: pending algorithm
+                          type: boolean
+                      type: object
+                    version:
+                      type: string
+                    workerEnv:
+                      description: key value environment variables for worker
+                      type: object
+                  required:
+                  - name
+                  type: object
+          description: action summery
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get all algorithms
+      tags:
+      - StoreAlgorithms
+    post:
+      description: Insert new algorithm to store if not exists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                algorithmEnv:
+                  description: key value environment variables for algorithm
+                  type: object
+                algorithmImage:
+                  description: image name as in the docker registry
+                  type: string
+                cpu:
+                  description: algorithm cpu
+                  minimum: 0
+                  type: number
+                entryPoint:
+                  type: string
+                env:
+                  enum:
+                  - nodejs
+                  - python
+                  - jvm
+                  type: string
+                gpu:
+                  description: algorithm gpu
+                  minimum: 0
+                  type: integer
+                mem:
+                  description: algorithm memory
+                  example: 512Mi
+                  type: string
+                minHotWorkers:
+                  default: 0
+                  description: how many live algorithm instances will always run
+                  minimum: 0
+                  type: integer
+                name:
+                  description: Unique identifier representing a specific algorithm
+                  format: algorithm-name
+                  minLength: 1
+                  type: string
+                nodeSelector:
+                  additionalProperties:
+                    type: string
+                  description: key value labels for nodes constraint
+                  type: object
+                options:
+                  default: {}
+                  properties:
+                    debug:
+                      default: false
+                      description: debug algorithm locally
+                      type: boolean
+                    pending:
+                      default: false
+                      description: pending algorithm
+                      type: boolean
+                  type: object
+                version:
+                  type: string
+                workerEnv:
+                  description: key value environment variables for worker
+                  type: object
+              required:
+              - name
+              type: object
+        description: algorithm descriptor to be added to the store
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: algorithm created
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline conflict
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Insert algorithm
+      tags:
+      - StoreAlgorithms
+    put:
+      description: Update existing algorithm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                algorithmEnv:
+                  description: key value environment variables for algorithm
+                  type: object
+                algorithmImage:
+                  description: image name as in the docker registry
+                  type: string
+                cpu:
+                  description: algorithm cpu
+                  minimum: 0
+                  type: number
+                entryPoint:
+                  type: string
+                env:
+                  enum:
+                  - nodejs
+                  - python
+                  - jvm
+                  type: string
+                gpu:
+                  description: algorithm gpu
+                  minimum: 0
+                  type: integer
+                mem:
+                  description: algorithm memory
+                  example: 512Mi
+                  type: string
+                minHotWorkers:
+                  default: 0
+                  description: how many live algorithm instances will always run
+                  minimum: 0
+                  type: integer
+                name:
+                  description: Unique identifier representing a specific algorithm
+                  format: algorithm-name
+                  minLength: 1
+                  type: string
+                nodeSelector:
+                  additionalProperties:
+                    type: string
+                  description: key value labels for nodes constraint
+                  type: object
+                options:
+                  default: {}
+                  properties:
+                    debug:
+                      default: false
+                      description: debug algorithm locally
+                      type: boolean
+                    pending:
+                      default: false
+                      description: pending algorithm
+                      type: boolean
+                  type: object
+                version:
+                  type: string
+                workerEnv:
+                  description: key value environment variables for worker
+                  type: object
+              required:
+              - name
+              type: object
+        description: algorithm descriptor to be added to the store
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Update algorithm
+      tags:
+      - StoreAlgorithms
+  /store/algorithms/apply:
+    post:
+      description: create or update algorithm, build id will be returned if build
+        was triggered
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  description: 'the algorithm source code (file types: zip, tar.gz)'
+                  format: binary
+                  type: string
+                payload:
+                  properties:
+                    algorithmEnv:
+                      description: key value environment variables for algorithm
+                      type: object
+                    algorithmImage:
+                      description: image name as in the docker registry
+                      type: string
+                    cpu:
+                      description: algorithm cpu
+                      minimum: 0
+                      type: number
+                    entryPoint:
+                      type: string
+                    env:
+                      enum:
+                      - nodejs
+                      - python
+                      - jvm
+                      type: string
+                    gpu:
+                      description: algorithm gpu
+                      minimum: 0
+                      type: integer
+                    mem:
+                      description: algorithm memory
+                      example: 512Mi
+                      type: string
+                    minHotWorkers:
+                      default: 0
+                      description: how many live algorithm instances will always run
+                      minimum: 0
+                      type: integer
+                    name:
+                      description: Unique identifier representing a specific algorithm
+                      format: algorithm-name
+                      minLength: 1
+                      type: string
+                    nodeSelector:
+                      additionalProperties:
+                        type: string
+                      description: key value labels for nodes constraint
+                      type: object
+                    options:
+                      default: {}
+                      properties:
+                        debug:
+                          default: false
+                          description: debug algorithm locally
+                          type: boolean
+                        pending:
+                          default: false
+                          description: pending algorithm
+                          type: boolean
+                      type: object
+                    version:
+                      type: string
+                    workerEnv:
+                      description: key value environment variables for worker
+                      type: object
+                  required:
+                  - name
+                  type: object
+              type: object
+        description: algorithm descriptor to be added to the store
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  algorithm:
+                    properties:
+                      algorithmEnv:
+                        description: key value environment variables for algorithm
+                        type: object
+                      algorithmImage:
+                        description: image name as in the docker registry
+                        type: string
+                      cpu:
+                        description: algorithm cpu
+                        minimum: 0
+                        type: number
+                      entryPoint:
+                        type: string
+                      env:
+                        enum:
+                        - nodejs
+                        - python
+                        - jvm
+                        type: string
+                      gpu:
+                        description: algorithm gpu
+                        minimum: 0
+                        type: integer
+                      mem:
+                        description: algorithm memory
+                        example: 512Mi
+                        type: string
+                      minHotWorkers:
+                        default: 0
+                        description: how many live algorithm instances will always
+                          run
+                        minimum: 0
+                        type: integer
+                      name:
+                        description: Unique identifier representing a specific algorithm
+                        format: algorithm-name
+                        minLength: 1
+                        type: string
+                      nodeSelector:
+                        additionalProperties:
+                          type: string
+                        description: key value labels for nodes constraint
+                        type: object
+                      options:
+                        default: {}
+                        properties:
+                          debug:
+                            default: false
+                            description: debug algorithm locally
+                            type: boolean
+                          pending:
+                            default: false
+                            description: pending algorithm
+                            type: boolean
+                        type: object
+                      version:
+                        type: string
+                      workerEnv:
+                        description: key value environment variables for worker
+                        type: object
+                    required:
+                    - name
+                    type: object
+                  buildId:
+                    description: Pipeline name
+                    type: string
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+                type: object
+          description: algorithm applied
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Apply algorithm
+      tags:
+      - StoreAlgorithms
+  /store/algorithms/{name}:
+    delete:
+      description: Delete existing algorithm from store
+      parameters:
+      - description: algorithm name to get from the store
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Delete algorithm
+      tags:
+      - StoreAlgorithms
+    get:
+      description: get specific algorithm from store
+      parameters:
+      - description: algorithm name to get from the store
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  algorithmEnv:
+                    description: key value environment variables for algorithm
+                    type: object
+                  algorithmImage:
+                    description: image name as in the docker registry
+                    type: string
+                  cpu:
+                    description: algorithm cpu
+                    minimum: 0
+                    type: number
+                  entryPoint:
+                    type: string
+                  env:
+                    enum:
+                    - nodejs
+                    - python
+                    - jvm
+                    type: string
+                  gpu:
+                    description: algorithm gpu
+                    minimum: 0
+                    type: integer
+                  mem:
+                    description: algorithm memory
+                    example: 512Mi
+                    type: string
+                  minHotWorkers:
+                    default: 0
+                    description: how many live algorithm instances will always run
+                    minimum: 0
+                    type: integer
+                  name:
+                    description: Unique identifier representing a specific algorithm
+                    format: algorithm-name
+                    minLength: 1
+                    type: string
+                  nodeSelector:
+                    additionalProperties:
+                      type: string
+                    description: key value labels for nodes constraint
+                    type: object
+                  options:
+                    default: {}
+                    properties:
+                      debug:
+                        default: false
+                        description: debug algorithm locally
+                        type: boolean
+                      pending:
+                        default: false
+                        description: pending algorithm
+                        type: boolean
+                    type: object
+                  version:
+                    type: string
+                  workerEnv:
+                    description: key value environment variables for worker
+                    type: object
+                required:
+                - name
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get algorithm
+      tags:
+      - StoreAlgorithms
+  /store/pipelines:
+    get:
+      description: Get all pipelines from store
+      parameters:
+      - description: sort by
+        in: query
+        name: sort
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  additionalProperties: false
+                  properties:
+                    description:
+                      description: pipeline description
+                      type: string
+                    flowInput:
+                      description: input object
+                      type: object
+                    name:
+                      description: Unique identifier representing a specific pipeline
+                      format: pipeline-name
+                      minLength: 1
+                      type: string
+                    nodes:
+                      description: Array of nodes
+                      items:
+                        properties:
+                          algorithmName:
+                            description: The name of the algorithm
+                            format: algorithm-name
+                            minLength: 1
+                            type: string
+                          input:
+                            default: []
+                            description: The input for the algorithm
+                            items: {}
+                            type: array
+                          nodeName:
+                            description: Unique node identifier
+                            minLength: 1
+                            type: string
+                        required:
+                        - nodeName
+                        - algorithmName
+                        type: object
+                      type: array
+                    options:
+                      default: {}
+                      description: optional properties
+                      properties:
+                        batchTolerance:
+                          default: 80
+                          example: 80
+                          maximum: 100
+                          minimum: 0
+                          type: integer
+                        concurrentPipelines:
+                          example: 1
+                          maximum: 10000
+                          minimum: 1
+                          type: integer
+                        progressVerbosityLevel:
+                          default: info
+                          enum:
+                          - trace
+                          - debug
+                          - info
+                          - warn
+                          - error
+                          - critical
+                          example: info
+                          type: string
+                        ttl:
+                          default: 3600
+                          description: pipeline time to live in seconds
+                          example: 3600
+                          minimum: 1
+                          type: integer
+                      type: object
+                    priority:
+                      default: 3
+                      example: 3
+                      maximum: 5
+                      minimum: 1
+                      type: integer
+                    triggers:
+                      additionalProperties: false
+                      properties:
+                        cron:
+                          properties:
+                            enabled:
+                              default: false
+                              description: enable or disable cron job
+                              type: boolean
+                            pattern:
+                              description: cron job
+                              format: cron
+                              minLength: 1
+                              type: string
+                          type: object
+                        pipelines:
+                          description: pipelines to activate upon result
+                          items:
+                            minLength: 1
+                            type: string
+                          type: array
+                      type: object
+                    webhooks:
+                      additionalProperties: false
+                      properties:
+                        progress:
+                          description: url to activate upon progress
+                          example: http://my-url-to-progress
+                          format: url
+                          minLength: 1
+                          type: string
+                        result:
+                          description: url to activate upon result
+                          example: http://my-url-to-result
+                          format: url
+                          minLength: 1
+                          type: string
+                      type: object
+                  required:
+                  - name
+                  - nodes
+                  type: object
+          description: action summery
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get all pipelines
+      tags:
+      - StorePipelines
+    post:
+      description: Insert new pipeline to store if not exist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                description:
+                  description: pipeline description
+                  type: string
+                flowInput:
+                  description: input object
+                  type: object
+                name:
+                  description: Unique identifier representing a specific pipeline
+                  format: pipeline-name
+                  minLength: 1
+                  type: string
+                nodes:
+                  description: Array of nodes
+                  items:
+                    properties:
+                      algorithmName:
+                        description: The name of the algorithm
+                        format: algorithm-name
+                        minLength: 1
+                        type: string
+                      input:
+                        default: []
+                        description: The input for the algorithm
+                        items: {}
+                        type: array
+                      nodeName:
+                        description: Unique node identifier
+                        minLength: 1
+                        type: string
+                    required:
+                    - nodeName
+                    - algorithmName
+                    type: object
+                  type: array
+                options:
+                  default: {}
+                  description: optional properties
+                  properties:
+                    batchTolerance:
+                      default: 80
+                      example: 80
+                      maximum: 100
+                      minimum: 0
+                      type: integer
+                    concurrentPipelines:
+                      example: 1
+                      maximum: 10000
+                      minimum: 1
+                      type: integer
+                    progressVerbosityLevel:
+                      default: info
+                      enum:
+                      - trace
+                      - debug
+                      - info
+                      - warn
+                      - error
+                      - critical
+                      example: info
+                      type: string
+                    ttl:
+                      default: 3600
+                      description: pipeline time to live in seconds
+                      example: 3600
+                      minimum: 1
+                      type: integer
+                  type: object
+                priority:
+                  default: 3
+                  example: 3
+                  maximum: 5
+                  minimum: 1
+                  type: integer
+                triggers:
+                  additionalProperties: false
+                  properties:
+                    cron:
+                      properties:
+                        enabled:
+                          default: false
+                          description: enable or disable cron job
+                          type: boolean
+                        pattern:
+                          description: cron job
+                          format: cron
+                          minLength: 1
+                          type: string
+                      type: object
+                    pipelines:
+                      description: pipelines to activate upon result
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                  type: object
+                webhooks:
+                  additionalProperties: false
+                  properties:
+                    progress:
+                      description: url to activate upon progress
+                      example: http://my-url-to-progress
+                      format: url
+                      minLength: 1
+                      type: string
+                    result:
+                      description: url to activate upon result
+                      example: http://my-url-to-result
+                      format: url
+                      minLength: 1
+                      type: string
+                  type: object
+              required:
+              - name
+              - nodes
+              type: object
+        description: an object representing all information needed for pipeline execution
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  description:
+                    description: pipeline description
+                    type: string
+                  flowInput:
+                    description: input object
+                    type: object
+                  name:
+                    description: Unique identifier representing a specific pipeline
+                    format: pipeline-name
+                    minLength: 1
+                    type: string
+                  nodes:
+                    description: Array of nodes
+                    items:
+                      properties:
+                        algorithmName:
+                          description: The name of the algorithm
+                          format: algorithm-name
+                          minLength: 1
+                          type: string
+                        input:
+                          default: []
+                          description: The input for the algorithm
+                          items: {}
+                          type: array
+                        nodeName:
+                          description: Unique node identifier
+                          minLength: 1
+                          type: string
+                      required:
+                      - nodeName
+                      - algorithmName
+                      type: object
+                    type: array
+                  options:
+                    default: {}
+                    description: optional properties
+                    properties:
+                      batchTolerance:
+                        default: 80
+                        example: 80
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      concurrentPipelines:
+                        example: 1
+                        maximum: 10000
+                        minimum: 1
+                        type: integer
+                      progressVerbosityLevel:
+                        default: info
+                        enum:
+                        - trace
+                        - debug
+                        - info
+                        - warn
+                        - error
+                        - critical
+                        example: info
+                        type: string
+                      ttl:
+                        default: 3600
+                        description: pipeline time to live in seconds
+                        example: 3600
+                        minimum: 1
+                        type: integer
+                    type: object
+                  priority:
+                    default: 3
+                    example: 3
+                    maximum: 5
+                    minimum: 1
+                    type: integer
+                  triggers:
+                    additionalProperties: false
+                    properties:
+                      cron:
+                        properties:
+                          enabled:
+                            default: false
+                            description: enable or disable cron job
+                            type: boolean
+                          pattern:
+                            description: cron job
+                            format: cron
+                            minLength: 1
+                            type: string
+                        type: object
+                      pipelines:
+                        description: pipelines to activate upon result
+                        items:
+                          minLength: 1
+                          type: string
+                        type: array
+                    type: object
+                  webhooks:
+                    additionalProperties: false
+                    properties:
+                      progress:
+                        description: url to activate upon progress
+                        example: http://my-url-to-progress
+                        format: url
+                        minLength: 1
+                        type: string
+                      result:
+                        description: url to activate upon result
+                        example: http://my-url-to-result
+                        format: url
+                        minLength: 1
+                        type: string
+                    type: object
+                required:
+                - name
+                - nodes
+                type: object
+          description: pipeline created
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '409':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline conflict
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Insert pipeline
+      tags:
+      - StorePipelines
+    put:
+      description: Update existing pipeline
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: false
+              properties:
+                description:
+                  description: pipeline description
+                  type: string
+                flowInput:
+                  description: input object
+                  type: object
+                name:
+                  description: Unique identifier representing a specific pipeline
+                  format: pipeline-name
+                  minLength: 1
+                  type: string
+                nodes:
+                  description: Array of nodes
+                  items:
+                    properties:
+                      algorithmName:
+                        description: The name of the algorithm
+                        format: algorithm-name
+                        minLength: 1
+                        type: string
+                      input:
+                        default: []
+                        description: The input for the algorithm
+                        items: {}
+                        type: array
+                      nodeName:
+                        description: Unique node identifier
+                        minLength: 1
+                        type: string
+                    required:
+                    - nodeName
+                    - algorithmName
+                    type: object
+                  type: array
+                options:
+                  default: {}
+                  description: optional properties
+                  properties:
+                    batchTolerance:
+                      default: 80
+                      example: 80
+                      maximum: 100
+                      minimum: 0
+                      type: integer
+                    concurrentPipelines:
+                      example: 1
+                      maximum: 10000
+                      minimum: 1
+                      type: integer
+                    progressVerbosityLevel:
+                      default: info
+                      enum:
+                      - trace
+                      - debug
+                      - info
+                      - warn
+                      - error
+                      - critical
+                      example: info
+                      type: string
+                    ttl:
+                      default: 3600
+                      description: pipeline time to live in seconds
+                      example: 3600
+                      minimum: 1
+                      type: integer
+                  type: object
+                priority:
+                  default: 3
+                  example: 3
+                  maximum: 5
+                  minimum: 1
+                  type: integer
+                triggers:
+                  additionalProperties: false
+                  properties:
+                    cron:
+                      properties:
+                        enabled:
+                          default: false
+                          description: enable or disable cron job
+                          type: boolean
+                        pattern:
+                          description: cron job
+                          format: cron
+                          minLength: 1
+                          type: string
+                      type: object
+                    pipelines:
+                      description: pipelines to activate upon result
+                      items:
+                        minLength: 1
+                        type: string
+                      type: array
+                  type: object
+                webhooks:
+                  additionalProperties: false
+                  properties:
+                    progress:
+                      description: url to activate upon progress
+                      example: http://my-url-to-progress
+                      format: url
+                      minLength: 1
+                      type: string
+                    result:
+                      description: url to activate upon result
+                      example: http://my-url-to-result
+                      format: url
+                      minLength: 1
+                      type: string
+                  type: object
+              required:
+              - name
+              - nodes
+              type: object
+        description: an object representing all information needed for pipeline execution
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  description:
+                    description: pipeline description
+                    type: string
+                  flowInput:
+                    description: input object
+                    type: object
+                  name:
+                    description: Unique identifier representing a specific pipeline
+                    format: pipeline-name
+                    minLength: 1
+                    type: string
+                  nodes:
+                    description: Array of nodes
+                    items:
+                      properties:
+                        algorithmName:
+                          description: The name of the algorithm
+                          format: algorithm-name
+                          minLength: 1
+                          type: string
+                        input:
+                          default: []
+                          description: The input for the algorithm
+                          items: {}
+                          type: array
+                        nodeName:
+                          description: Unique node identifier
+                          minLength: 1
+                          type: string
+                      required:
+                      - nodeName
+                      - algorithmName
+                      type: object
+                    type: array
+                  options:
+                    default: {}
+                    description: optional properties
+                    properties:
+                      batchTolerance:
+                        default: 80
+                        example: 80
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      concurrentPipelines:
+                        example: 1
+                        maximum: 10000
+                        minimum: 1
+                        type: integer
+                      progressVerbosityLevel:
+                        default: info
+                        enum:
+                        - trace
+                        - debug
+                        - info
+                        - warn
+                        - error
+                        - critical
+                        example: info
+                        type: string
+                      ttl:
+                        default: 3600
+                        description: pipeline time to live in seconds
+                        example: 3600
+                        minimum: 1
+                        type: integer
+                    type: object
+                  priority:
+                    default: 3
+                    example: 3
+                    maximum: 5
+                    minimum: 1
+                    type: integer
+                  triggers:
+                    additionalProperties: false
+                    properties:
+                      cron:
+                        properties:
+                          enabled:
+                            default: false
+                            description: enable or disable cron job
+                            type: boolean
+                          pattern:
+                            description: cron job
+                            format: cron
+                            minLength: 1
+                            type: string
+                        type: object
+                      pipelines:
+                        description: pipelines to activate upon result
+                        items:
+                          minLength: 1
+                          type: string
+                        type: array
+                    type: object
+                  webhooks:
+                    additionalProperties: false
+                    properties:
+                      progress:
+                        description: url to activate upon progress
+                        example: http://my-url-to-progress
+                        format: url
+                        minLength: 1
+                        type: string
+                      result:
+                        description: url to activate upon result
+                        example: http://my-url-to-result
+                        format: url
+                        minLength: 1
+                        type: string
+                    type: object
+                required:
+                - name
+                - nodes
+                type: object
+          description: action summery
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Update pipeline
+      tags:
+      - StorePipelines
+  /store/pipelines/{name}:
+    delete:
+      description: Delete existing pipeline from store
+      parameters:
+      - description: pipeline name to get from the store
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Delete pipeline
+      tags:
+      - StorePipelines
+    get:
+      description: Get specific pipeline from store
+      parameters:
+      - description: pipeline name to get from the store
+        in: path
+        name: name
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: false
+                properties:
+                  description:
+                    description: pipeline description
+                    type: string
+                  flowInput:
+                    description: input object
+                    type: object
+                  name:
+                    description: Unique identifier representing a specific pipeline
+                    format: pipeline-name
+                    minLength: 1
+                    type: string
+                  nodes:
+                    description: Array of nodes
+                    items:
+                      properties:
+                        algorithmName:
+                          description: The name of the algorithm
+                          format: algorithm-name
+                          minLength: 1
+                          type: string
+                        input:
+                          default: []
+                          description: The input for the algorithm
+                          items: {}
+                          type: array
+                        nodeName:
+                          description: Unique node identifier
+                          minLength: 1
+                          type: string
+                      required:
+                      - nodeName
+                      - algorithmName
+                      type: object
+                    type: array
+                  options:
+                    default: {}
+                    description: optional properties
+                    properties:
+                      batchTolerance:
+                        default: 80
+                        example: 80
+                        maximum: 100
+                        minimum: 0
+                        type: integer
+                      concurrentPipelines:
+                        example: 1
+                        maximum: 10000
+                        minimum: 1
+                        type: integer
+                      progressVerbosityLevel:
+                        default: info
+                        enum:
+                        - trace
+                        - debug
+                        - info
+                        - warn
+                        - error
+                        - critical
+                        example: info
+                        type: string
+                      ttl:
+                        default: 3600
+                        description: pipeline time to live in seconds
+                        example: 3600
+                        minimum: 1
+                        type: integer
+                    type: object
+                  priority:
+                    default: 3
+                    example: 3
+                    maximum: 5
+                    minimum: 1
+                    type: integer
+                  triggers:
+                    additionalProperties: false
+                    properties:
+                      cron:
+                        properties:
+                          enabled:
+                            default: false
+                            description: enable or disable cron job
+                            type: boolean
+                          pattern:
+                            description: cron job
+                            format: cron
+                            minLength: 1
+                            type: string
+                        type: object
+                      pipelines:
+                        description: pipelines to activate upon result
+                        items:
+                          minLength: 1
+                          type: string
+                        type: array
+                    type: object
+                  webhooks:
+                    additionalProperties: false
+                    properties:
+                      progress:
+                        description: url to activate upon progress
+                        example: http://my-url-to-progress
+                        format: url
+                        minLength: 1
+                        type: string
+                      result:
+                        description: url to activate upon result
+                        example: http://my-url-to-result
+                        format: url
+                        minLength: 1
+                        type: string
+                    type: object
+                required:
+                - name
+                - nodes
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: pipeline Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Get pipeline
+      tags:
+      - StorePipelines
+  /webhooks/results/{jobId}:
+    get:
+      description: Returns a webhook result for specific pipeline
+      parameters:
+      - description: Unique identifier representing pipeline execution
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  httpResponse:
+                    properties:
+                      statusCode:
+                        type: string
+                      statusMessage:
+                        type: string
+                    type: object
+                  pipelineStatus:
+                    type: string
+                  responseStatus:
+                    type: string
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+                  url:
+                    type: string
+                type: object
+          description: action summery
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: webhook Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Webhook result
+      tags:
+      - Webhooks
+  /webhooks/status/{jobId}:
+    get:
+      description: Returns a webhook status for specific pipeline
+      parameters:
+      - description: Unique identifier representing pipeline execution
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  httpResponse:
+                    properties:
+                      statusCode:
+                        type: string
+                      statusMessage:
+                        type: string
+                    type: object
+                  pipelineStatus:
+                    type: string
+                  responseStatus:
+                    type: string
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+                  url:
+                    type: string
+                type: object
+          description: pipeline result
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: jobId Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Webhook status
+      tags:
+      - Webhooks
+  /webhooks/{jobId}:
+    get:
+      description: Returns all webhooks for specific pipeline
+      parameters:
+      - description: Unique identifier representing pipeline execution
+        in: path
+        name: jobId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  httpResponse:
+                    properties:
+                      statusCode:
+                        type: string
+                      statusMessage:
+                        type: string
+                    type: object
+                  pipelineStatus:
+                    type: string
+                  responseStatus:
+                    type: string
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+                  url:
+                    type: string
+                type: object
+          description: pipeline result
+        '400':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: bad request
+        '404':
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: webhook Not Found
+        default:
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    format: int32
+                    type: integer
+                  message:
+                    type: string
+                type: object
+          description: Unexpected error
+      summary: Webhook list
+      tags:
+      - Webhooks
+servers:
+- url: /api/v1
+tags:
+- description: Execution pipelines as raw or stored
+  name: Execution
+- description: Get pipelines status and result
+  name: Pipelines
+- description: Store new algorithms, update, get and delete
+  name: StoreAlgorithms
+- description: Store new pipelines, update, get and delete
+  name: StorePipelines
+- description: Get pipelines cron result and status
+  name: Cron
+- description: Store readme for pipelines and algorithms
+  name: Pipeline Readme
+- description: Webhooks status and result
+  name: Webhooks
