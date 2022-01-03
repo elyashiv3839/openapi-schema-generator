@@ -1,8 +1,8 @@
 from ast import literal_eval
 from .FilePathTracker import FilePathTracker
-from .V_2_Generator import V2Generator
-from .V_3_Generator import V3Generator
-from .AbsGenerator import AbstractGenerator
+from openapi_schema_generator.Versions.V_2_Generator import V2Generator
+from openapi_schema_generator.Versions.V_3_Generator import V3Generator
+from openapi_schema_generator.Versions.AbsGenerator import AbstractGenerator
 
 
 class OpenApiSchemaGenerator(object):

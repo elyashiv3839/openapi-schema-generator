@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="openapi-schema-generator",
-    version="1.0.0",
+    version="1.0.1",
     author="Elyashiv Danino",
     author_email="elyashiv3839@gmail.com",
     description="Resolve schema and deploy to single schema",
@@ -19,7 +19,7 @@ setuptools.setup(
         "Licence :: MIT",
         "Operating System :: Multi-platform",
     ],
-    packages=['openapi_schema_generator'],
+    packages=setuptools.find_packages(),
     python_requires=">=3.6",
     install_requires=["attrs==21.2.0", "importlib-metadata==4.8.1", "isodate==0.6.0", "jsonschema==3.2.0",
                       "openapi-schema-validator==0.1.5", "pyrsistent==0.18.0", "PyYAML==5.4.1", "six==1.16.0",

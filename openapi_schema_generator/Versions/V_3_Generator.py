@@ -1,5 +1,5 @@
 from copy import deepcopy
-from .FilePathTracker import FilePathTracker
+from openapi_schema_generator.FilePathTracker import FilePathTracker
 from .AbsGenerator import AbstractGenerator
 
 
