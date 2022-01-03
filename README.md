@@ -13,11 +13,6 @@
 	```
 
 - Prerequisite:
-    - Clone the following submodule:
-        ```
-        http://dvdgitlab.rafael.local/TestingDepartment_Binat_Krav/submodules/ccst_recursive_compare_objects.git
-        ```
-
     - Install requirements:
         ```
         pip install -r requirements.txt
@@ -89,6 +84,3 @@
 			3. Any object at main file refer to its specific file in folder hierarchy. The Root is main file's directory.
 		```
 
-
-
-Email me for support: daninoel@rafael.local
