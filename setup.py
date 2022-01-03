@@ -16,7 +16,7 @@ setuptools.setup(
     project_urls={"Bug Tracker": "https://github.com/elyashiv3839/openapi-schema-generator.git/issues"},
     classifier=[
         "Programming Language :: Python :: 3",
-        "Licence :: RAFAEL",
+        "Licence :: MIT",
         "Operating System :: Multi-platform",
     ],
     packages=['openapi_schema_generator'],
