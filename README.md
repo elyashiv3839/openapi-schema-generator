@@ -9,7 +9,7 @@
 			
 		OpenApiSchemaValidator - 
 			1. Hold all server endpoints schemas - and gives the utility to validate any object with its schema automatically.
-			2. In case its usefull - get swagger schema dynamically by endpoint and rest type.
+			2. In case its usefull - get swagger schema dynamically by endpoint and method.
 	```
 
 - Prerequisite:
@@ -56,7 +56,7 @@
 		```
 	- Note:
 		```
-		As a default behavior - default rest type for request method is 'post', and for response method is 'get'.
+		As a default behavior - default method for request method is 'post', and for response method is 'get'.
 		You can use it for save text most of the times instead specify methods.
 		```
 
